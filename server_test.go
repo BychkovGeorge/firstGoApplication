@@ -13,12 +13,12 @@ type SpyStore struct {
 	scores map[string]int
 }
 
-func (s *SpyStore) GetPlayerScore(name string) (int, bool) {
+func (s *SpyStore) GetPlayerScore(name string) int {
 	score, ok := s.scores[name]
 	if ok {
-		return score, true
+		return score
 	}
-	return 0, false
+	return 0
 }
 
 func (s *SpyStore) IncrementPlayerScore(name string) {
@@ -29,7 +29,7 @@ func (s *SpyStore) IncrementPlayerScore(name string) {
 	s.scores[name] = 1
 }
 
-func (s *SpyStore) GetLeague() []Player {
+func (s *SpyStore) GetLeague() League {
 	players := make([]Player, 0)
 
 	for playerName, playerScore := range s.scores {
@@ -160,5 +160,12 @@ func assertContentType(t *testing.T, r *httptest.ResponseRecorder, want string) 
 	t.Helper()
 	if r.Result().Header.Get("content-type") != want {
 		t.Errorf("response did not have content-type of application/json, got %v", r.Result().Header)
+	}
+}
+
+func assertScoreEquals(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %d, want %d", got, want)
 	}
 }

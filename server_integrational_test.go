@@ -8,8 +8,11 @@ import (
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := InMemoryPlayerStore{}
-	server := NewPlayerServer(&store)
+	database, removeFile := assertCreateFile(t, "[]")
+	defer removeFile()
+	store, err := NewFileSystemPlayerStore(database)
+	assertNoError(t, err)
+	server := NewPlayerServer(store)
 	player := "Pepper"
 
 	getRequest, _ := createNewGetScoreRequest(player)

@@ -1,4 +1,4 @@
-package main
+package poker
 
 import (
 	"encoding/json"
@@ -16,6 +16,11 @@ type PlayerStore interface {
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
+}
+
+type Player struct {
+	Name  string
+	Score int
 }
 
 func NewPlayerServer(store PlayerStore) *PlayerServer {

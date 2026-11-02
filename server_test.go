@@ -1,4 +1,4 @@
-package main
+package poker
 
 import (
 	"encoding/json"
@@ -10,7 +10,8 @@ import (
 )
 
 type SpyStore struct {
-	scores map[string]int
+	scores   map[string]int
+	winCalls []string
 }
 
 func (s *SpyStore) GetPlayerScore(name string) int {
@@ -22,11 +23,15 @@ func (s *SpyStore) GetPlayerScore(name string) int {
 }
 
 func (s *SpyStore) IncrementPlayerScore(name string) {
+	if s.scores == nil {
+		s.scores = make(map[string]int)
+	}
 	score, ok := s.scores[name]
 	if ok {
 		s.scores[name] = score + 1
 	}
 	s.scores[name] = 1
+	s.winCalls = append(s.winCalls, name)
 }
 
 func (s *SpyStore) GetLeague() League {
